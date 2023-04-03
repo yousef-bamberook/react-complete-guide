@@ -1,0 +1,48 @@
+:root {
+  --size: 70px;
+}
+
+.switch-container {
+  margin: auto 0;
+}
+.switch-checkbox {
+  height: 0;
+  width: 0;
+  display: none;
+}
+
+.switch-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  width: var(--size);
+  height: calc(var(--size) / 2);
+  background: grey;
+  border-radius: 100px;
+  position: relative;
+  transition: background-color 0.2s;
+  margin: auto;
+}
+
+.switch-label .switch-button {
+  content: '';
+  position: absolute;
+  left: calc(var(--size) * 0.02);
+  top: calc(var(--size) * 0.02);
+  width: calc(var(--size) * 0.45);
+  height: calc(var(--size) * 0.45);
+  border-radius: calc(var(--size) * 0.45);
+  transition: 0.2s;
+  background: #fff;
+  box-shadow: 0 0 2px 0 rgba(10, 10, 10, 0.29);
+}
+
+.switch-checkbox:checked + .switch-label .switch-button {
+  left: calc(100% - var(--size) * 0.02);
+  transform: translateX(-100%);
+}
+
+.switch-label:active .switch-button {
+  width: calc(var(--size) * 0.6);
+}

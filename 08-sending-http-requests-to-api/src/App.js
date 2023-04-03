@@ -3,11 +3,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import MoviesList from './components/MoviesList';
 import AddMovie from './components/AddMovie';
 import './App.css';
+import Button from './components/UI/Button';
+import Switch from './components/UI/Switch';
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [switchApi, setSwitchApi] = useState(false);
 
   // ---Use The Star Wars API---
   //GET
@@ -92,6 +95,10 @@ function App() {
     console.log(data);
   }
 
+  const onSwitchChangeHangler = () => {
+    setSwitchApi(!switchApi);
+  };
+
   //Validations
   let content = <p>Found no movies.</p>;
 
@@ -109,11 +116,27 @@ function App() {
 
   return (
     <React.Fragment>
-      <section>
-        <AddMovie onAddMovie={addMovieHandler} />
+      <section style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+        <p style={{ flex: '1 1 0px' }}>The Star Wars API</p>
+        <Switch isOn={switchApi} onChange={onSwitchChangeHangler} />
+        <p style={{ flex: '1 1 0px' }}>Fire Base</p>
       </section>
+      {switchApi && (
+        <section>
+          <AddMovie onAddMovie={addMovieHandler} />
+        </section>
+      )}
       <section>
-        <button onClick={fetchMoviesFromFireBaseHandler}>Fetch Movies</button>
+        {switchApi && (
+          <Button onClick={fetchMoviesFromFireBaseHandler}>
+            Fetch Movies(Fire Base)
+          </Button>
+        )}
+        {!switchApi && (
+          <Button onClick={fetchMoviesFromPublicApiHandler}>
+            Fetch Movies(Public Api)
+          </Button>
+        )}
       </section>
       <section>{content}</section>
     </React.Fragment>
