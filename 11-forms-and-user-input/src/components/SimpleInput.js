@@ -1,48 +1,42 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 const SimpleInput = (props) => {
-  const nameInputRef = useRef();
   const [enteredName, setEnteredName] = useState('');
-  //used to validate the form
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
   const [enteredNameTouched, setEnteredNameTouched] = useState(false);
 
-  //Setting enteredNameIsValid = true initially will cause an issue which is
-  //this hook will trigger when page loaded and assuming the form is valid
-  useEffect(() => {
-    if (enteredNameIsValid) {
-      console.log('Name Inputid valid!');
-    }
-  }, [enteredNameIsValid]);
+  const enteredNameIsValid = enteredName.trim() !== '';
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
+
+  //Overall Form Validity -- put all inputs that need validation inside if condition
+  let formIsValid = false;
+  if (enteredNameIsValid) {
+    formIsValid = true;
+  }
+
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
+  };
+
+  const nameInputBlurHandler = (event) => {
+    setEnteredNameTouched(true);
   };
 
   const formSubmissionHandler = (event) => {
     event.preventDefault();
 
-    //basic validation
     setEnteredNameTouched(true);
 
-    if (enteredName.trim() === '') {
-      setEnteredNameIsValid(false);
+    if (!enteredNameIsValid) {
       return;
     }
-    setEnteredNameIsValid(true);
 
     console.log(enteredName);
 
-    const enteredValue = nameInputRef.current.value;
-    console.log(enteredValue);
-
-    //resetting hte form
-    // nameInputRef.current.value = ''; // => NOT IDEAL, DON'T MANIPULATE THE DOM
     setEnteredName('');
+    setEnteredNameTouched(false);
   };
 
-  const nameInputIsInvalild = !enteredNameIsValid && enteredNameTouched;
-
-  const nameInputClasses = nameInputIsInvalild
+  const nameInputClasses = nameInputIsInvalid
     ? 'form-control invalid'
     : 'form-control';
 
@@ -51,17 +45,18 @@ const SimpleInput = (props) => {
       <div className={nameInputClasses}>
         <label htmlFor="name">Your Name</label>
         <input
-          ref={nameInputRef}
           type="text"
           id="name"
           onChange={nameInputChangeHandler}
+          onBlur={nameInputBlurHandler}
+          value={enteredName}
         />
-        {nameInputIsInvalild && (
+        {nameInputIsInvalid && (
           <p className="error-text">Name must not be empty.</p>
         )}
       </div>
       <div className="form-actions">
-        <button>Submit</button>
+        <button disabled={!formIsValid}>Submit</button>
       </div>
     </form>
   );
