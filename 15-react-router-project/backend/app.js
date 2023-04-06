@@ -21,6 +21,6 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message });
 });
 
-app.listen(3000, () => {
-  console.log('Server started listening on port ' + 80);
+app.listen(8080, () => {
+  console.log('Server started listening on port ' + 8080);
 });
